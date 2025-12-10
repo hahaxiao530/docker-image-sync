@@ -1,0 +1,57 @@
+name: Sync Immich Images to Docker Hub
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # 每 6 小时自动同步一次
+  workflow_dispatch:        # 可以手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Sync immich-server
+        uses: akhilerm/tag-push-action@v2.1.0
+        with:
+          src: ghcr.io/immich-app/immich-server:latest
+          dst: sean530/immich-server:latest
+
+      - name: Sync immich-microservices
+        uses: akhilerm/tag-push-action@v2.1.0
+        with:
+          src: ghcr.io/immich-app/immich-microservices:latest
+          dst: sean530/immich-microservices:latest
+
+      - name: Sync immich-machine-learning
+        uses: akhilerm/tag-push-action@v2.1.0
+        with:
+          src: ghcr.io/immich-app/immich-machine-learning:latest
+          dst: sean530/immich-machine-learning:latest
+
+      - name: Sync immich-web
+        uses: akhilerm/tag-push-action@v2.1.0
+        with:
+          src: ghcr.io/immich-app/immich-web:latest
+          dst: sean530/immich-web:latest
+
+      - name: Sync pgvecto-rs
+        uses: akhilerm/tag-push-action@v2.1.0
+        with:
+          src: tensorchord/pgvecto-rs:pg16-v0.2.0
+          dst: sean530/pgvecto-rs:pg16-v0.2.0
+
+      # 若需要同步 Redis，则取消下面注释
+      # - name: Sync redis
+      #   uses: akhilerm/tag-push-action@v2.1.0
+      #   with:
+      #     src: redis:7
+      #     dst: sean530/redis:7
