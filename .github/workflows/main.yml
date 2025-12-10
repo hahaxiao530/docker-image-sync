@@ -29,11 +29,11 @@ jobs:
           dst: sean530/immich-server:v2
 
       # 同步 Immich Microservices
-      - name: Sync immich-microservices
-        uses: akhilerm/tag-push-action@v2.1.0
-        with:
-          src: ghcr.io/immich-app/immich-microservices:v2
-          dst: sean530/immich-microservices:v2
+      #- name: Sync immich-microservices
+      #  uses: akhilerm/tag-push-action@v2.1.0
+      #  with:
+      #    src: ghcr.io/immich-app/immich-microservices:v2
+      #    dst: sean530/immich-microservices:v2
 
       # 同步 Immich Machine Learning
       - name: Sync immich-machine-learning
