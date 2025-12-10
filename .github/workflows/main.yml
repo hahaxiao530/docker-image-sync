@@ -2,62 +2,63 @@ name: Sync Immich Images to Docker Hub
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # 每 6 小时自动同步一次
-  workflow_dispatch:        # 可以手动触发
+    - cron: "0 */6 * * *"  # 每 6 小时同步一次
+  workflow_dispatch:        # 可手动触发
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      # 登录 Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 登录 GHCR（Immich 镜像源）
+      - name: Login to GHCR
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # 同步 Immich Server
       - name: Sync immich-server
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ghcr.io/immich-app/immich-server:v2
           dst: sean530/immich-server:v2
 
+      # 同步 Immich Microservices
       - name: Sync immich-microservices
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ghcr.io/immich-app/immich-microservices:v2
           dst: sean530/immich-microservices:v2
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
 
+      # 同步 Immich Machine Learning
       - name: Sync immich-machine-learning
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ghcr.io/immich-app/immich-machine-learning:v2
           dst: sean530/immich-machine-learning:v2
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
 
+      # 同步 Immich Web
       - name: Sync immich-web
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ghcr.io/immich-app/immich-web:v2
           dst: sean530/immich-web:v2
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
 
+      # 同步 pgvecto-rs
       - name: Sync pgvecto-rs
         uses: akhilerm/tag-push-action@v2.1.0
         with:
-          src: tensorchord/pgvecto-rs:pg16-v0.2.0
-          dst: sean530/pgvecto-rs:pg16-v0.2.0
+          src: tensorchord/pgvecto-rs:pg14-v0.2.0
+          dst: sean530/pgvecto-rs:pg14-v0.2.0
 
-      # 若需要同步 Redis，则取消下面注释
+      # 如果你需要同步 Redis，可以解除下面注释
       # - name: Sync redis
       #   uses: akhilerm/tag-push-action@v2.1.0
       #   with:
-      #     src: redis:7
-      #     dst: sean530/redis:7
+      #     src: redis:6
+      #     dst: sean530/redis:6
