@@ -23,25 +23,31 @@ jobs:
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ghcr.io/immich-app/immich-server:v2
-          dst: sean530/immich-server:latest
+          dst: sean530/immich-server:v2
 
       - name: Sync immich-microservices
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ghcr.io/immich-app/immich-microservices:v2
-          dst: sean530/immich-microservices:latest
+          dst: sean530/immich-microservices:v2
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Sync immich-machine-learning
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ghcr.io/immich-app/immich-machine-learning:v2
-          dst: sean530/immich-machine-learning:latest
+          dst: sean530/immich-machine-learning:v2
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Sync immich-web
         uses: akhilerm/tag-push-action@v2.1.0
         with:
           src: ghcr.io/immich-app/immich-web:v2
-          dst: sean530/immich-web:latest
+          dst: sean530/immich-web:v2
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Sync pgvecto-rs
         uses: akhilerm/tag-push-action@v2.1.0
