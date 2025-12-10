@@ -43,11 +43,11 @@ jobs:
           dst: sean530/immich-machine-learning:v2
 
       # 同步 Immich Web
-      - name: Sync immich-web
-        uses: akhilerm/tag-push-action@v2.1.0
-        with:
-          src: ghcr.io/immich-app/immich-web:v2
-          dst: sean530/immich-web:v2
+      #- name: Sync immich-web
+      #  uses: akhilerm/tag-push-action@v2.1.0
+      #  with:
+      #    src: ghcr.io/immich-app/immich-web:v2
+      #    dst: sean530/immich-web:v2
 
       # 同步 pgvecto-rs
       - name: Sync pgvecto-rs
